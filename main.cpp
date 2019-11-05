@@ -37,6 +37,16 @@ void drawAxes()
 	}
 }
 
+void displayText( float x, float y, int r, int g, int b, const char *string ) {
+int j = strlen( string );
+
+glColor3f( r, g, b );
+glRasterPos2f( x, y );
+for( int i = 0; i < j; i++ ) {
+glutBitmapCharacter( GLUT_BITMAP_HELVETICA_10, string[i] );
+}
+}
+
 
 void drawBody(double a, double b,double c){
 
@@ -205,35 +215,31 @@ void drawCone(double radius,double height,int segments)
 
 
 
-
 void drawCylinder(double radius,double height,int segments)
 {
-   int i;
+    int i;
+    double shade;
     struct point points[100];
-    struct point points1[100];
-    glColor3f(0.7,0.7,0.7);
     //generate points
     for(i=0;i<=segments;i++)
     {
         points[i].x=radius*cos(((double)i/(double)segments)*2*pi);
         points[i].y=radius*sin(((double)i/(double)segments)*2*pi);
     }
-    //draw segments using generated points
+    //draw quads using generated points
     for(i=0;i<segments;i++)
     {
-        glBegin(GL_LINES);
+
+        glBegin(GL_QUADS);
         {
-			glVertex3f(points[i].x,points[i].y,0);
-			glVertex3f(points[i+1].x,points[i+1].y,0);
+			glVertex3f(points[i].x,points[i].y,height/2);
+			glVertex3f(points[i+1].x,points[i+1].y,height/2);
+			glVertex3f(points[i].x,points[i].y,-height/2);
+			glVertex3f(points[i+1].x,points[i+1].y,-height/2);
         }
         glEnd();
     }
-
-
-
-
 }
-
 
 
 
@@ -337,10 +343,9 @@ glPushMatrix();{
     glPushMatrix();{
     glTranslatef(-27,-22,20);
     glRotatef(-3*angle,0,0,1);
-
     //glRotatef(4*angle,0,0,1);
-    glColor3f(1,1,0);
-    drawCylinder(10,10,50);
+    glColor3f(0,0,0);
+    drawCylinder(10,10,10);
     }glPopMatrix();
 
      glPushMatrix();{
@@ -359,8 +364,8 @@ glPushMatrix();{
         glRotatef(-3*angle,0,0,1);
 
     //glRotatef(4*angle,0,0,1);
-         glColor3f(1,1,0);
-  drawCylinder(10,10,50);
+         glColor3f(0,0,0);
+    drawCylinder(10,10,10);
     }glPopMatrix();
 
 
@@ -381,11 +386,11 @@ glPushMatrix();{
 
     glPushMatrix();{
     glTranslatef(-27,-22,-20);
-    glRotatef(3*angle,0,0,1);
+    glRotatef(-3*angle,0,0,1);
 
     //glRotatef(4*angle,0,0,1);
-    glColor3f(1,1,0);
-    drawCylinder(10,10,50);
+    glColor3f(0,0,0);
+    drawCylinder(10,10,10);
     }glPopMatrix();
 
      glPushMatrix();{
@@ -406,8 +411,8 @@ glPushMatrix();{
         glRotatef(-3*angle,0,0,1);
 
     //glRotatef(4*angle,0,0,1);
-        glColor3f(1,1,0);
-        drawCylinder(10,10,50);
+        glColor3f(0,0,0);
+    drawCylinder(10,10,10);
     }glPopMatrix();
 
 
@@ -502,7 +507,14 @@ glPushMatrix();{
     }glPopMatrix();
 
 
+
+
+
+
+
+
 //FG
+
 
     glPushMatrix();{
     glTranslatef(51,10,0);
@@ -510,6 +522,7 @@ glPushMatrix();{
     glColor3f(0,0,1);
     drawTringle(18,13,0);
     }glPopMatrix();
+
 
     glPushMatrix();{
     glTranslatef(51,-8,0);
@@ -705,6 +718,9 @@ void drawRoad(double a, double b,double c){
 
 }
 
+
+
+
 void display(){
 
 	//clear the display
@@ -728,7 +744,7 @@ void display(){
 
 	//gluLookAt(100,100,100,	0,0,0,	0,0,1);
 	//gluLookAt(200*cos(cameraAngle), 200*sin(cameraAngle), cameraHeight,		0,0,0,		0,0,1);
-	gluLookAt(200,0,-200,	0,0,0,	0,1,0);
+	gluLookAt(-200,200,-200,	0,0,0,	0,1,0);
 
 
 	//again select MODEL-VIEW
@@ -743,9 +759,13 @@ void display(){
 	drawAxes();
 	drawGrid();
 
+	//displayText(0,0,1,0,1,"BAIUST");
     glColor3f(1,0,0);
    // drawSquare(10);
 	//drawBus(50,20,10);
+
+
+
 
     glPushMatrix();{
 
